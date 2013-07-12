@@ -13,8 +13,8 @@ app.get('/', function(request, response) {
         console.log(status.message);
         return;
     }
-    var buffer = new Buffer(1000);
-    fs.read(fd, buffer, 0, 1000, 0, function(err, num) {
+    var buffer = new Buffer(10000);
+    fs.read(fd, buffer, 0, 10000, 0, function(err, num) {
         response.send(buffer.toString('utf-8', 0, num));
     });
   });
