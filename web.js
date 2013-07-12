@@ -1,18 +1,25 @@
-var fs = require('fs');
 var express = require('express');
 
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
 
-  var buffer = new Buffer(256);
+  var fs = require('fs');
+  var Buffer = require('buffer').Buffer;
+  var constants = require('constants');
 
-  fs.readFile('index.html', function (err, data) {
-    if (err) throw err;
-    buffer.write(data, "utf-8");
+  fs.open("index.html", 'r', function(status, fd) {
+    if (status) {
+        console.log(status.message);
+        return;
+    }
+    var buffer = new Buffer(1000);
+    fs.read(fd, buffer, 0, 1000, 0, function(err, num) {
+        response.send(buffer.toString('utf-8', 0, num));
+    });
   });
 
-  response.send(buffer.toString());
+
 });
 
 var port = process.env.PORT || 5000;
